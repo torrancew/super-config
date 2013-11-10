@@ -37,6 +37,18 @@ class SuperConfig < RecursiveOpenStruct
     return self.to_s.split(/::/).last.downcase
   end # def self.name
 
+  def each(&block)
+    return self.class.new(self.to_h.each(&block))
+  end # def each
+
+  def each_setting(&block)
+    return each(&block)
+  end # def each_setting
+
+  def map(&block)
+    return self.class.new(self.to_h.map(&block))
+  end # def map
+
   def merge(ostruct)
     return self.class.new(self.to_h.merge(ostruct.to_h))
   end # def merge
