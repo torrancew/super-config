@@ -1,0 +1,66 @@
+# SuperConfig
+
+A priority-based configuration class for Ruby built on SafeYAML and
+RecursiveOpenStruct
+
+## Background
+
+SuperConfig exists to provide a reliable, simple configuration class for Ruby
+projects that manages configuration from several sources, and provides a
+straightforward interface to the final config.
+
+SuperConfig is a subclass of RecursiveOpenStruct, which provides simple access
+to the config in an object-oriented or hash-based format.
+
+SuperClass currently supports loading configuration from the following sources:
+  * Class-level defaults
+  * Array of YAML file paths
+  * Specified environment variables
+
+Each successive layer is merged into the first, meaning that the last source
+"wins".
+
+Furthermore, helpful "merge", "merge!", "update" and "update!" methods have
+been added so that other hash-like structures can easily be "tacked-on" to the
+end.
+
+## Usage
+
+    require 'super-config'
+
+    class Foo::Config < SuperConfig
+      class << self
+        def name
+          return 'foo'
+        end
+
+        def defaults
+          return {
+            :bar => 'baz',
+            :qux => 'quux',
+          }
+        end
+
+        def env_map
+          return {
+            'FOO_BAR' => :bar,
+            'FOO_QUX' => :qux,
+          }
+      end
+    end
+
+    ...
+
+    # Loads config data
+    # from defaults, then
+    # /etc/foo.yml (if present),
+    # ~/.foo.yml (if present),
+    # And lastly, from the
+    # env vars FOO_BAR and FOO_QUX
+    config = Foo::Config.load_config
+    puts config.bar
+    puts config.qux
+
+    # To add a new, higher priority config
+    config.update!(:bar => 'bad')
+
