@@ -17,7 +17,9 @@ from YAML files (via safe_yaml), environment variables,
 and user-specified hashes.
 EOF
 
-  gem.add_dependency 'safe_yaml',             '~> 0.9.7'
+  gem.add_dependency 'safe_yaml',             '~> 1.0.0'
   gem.add_dependency 'recursive-open-struct', '~> 0.4.5'
+
+  gem.add_development_dependency 'rake'
 end
 
